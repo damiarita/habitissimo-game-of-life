@@ -52,4 +52,18 @@ final class GameOfLifeTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $game = new GameOfLife($board);
     }
+
+    public function testExceptionThrownWhenBoardArrayIsNotSequential():void
+    {
+        $board = array( 'a'=>array_fill(0, 2, false), 'b'=>array_fill(0,2,false) );
+        $this->expectException(InvalidArgumentException::class);
+        $game = new GameOfLife($board);
+    }
+
+    public function testExceptionThrownWhenColumnArrayIsNotSequential():void
+    {
+        $board = array( array('a'=>false, 'b'=>false), array_fill(0,2,false) );
+        $this->expectException(InvalidArgumentException::class);
+        $game = new GameOfLife($board);
+    }
 }
