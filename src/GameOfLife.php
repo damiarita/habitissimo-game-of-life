@@ -43,19 +43,19 @@ class GameOfLife
             //We check that the content of the array is correct
             foreach($this->board as $row):
                 if( !\is_array($row) ):
-                    throw new Exception('All rows of the board must be defined as arrays.');
+                    throw new \InvalidArgumentException('All rows of the board must be defined as arrays.');
                 endif;
 
                 if( !isset($this->numColumns) ):
                     $this->numColumns = \count($row);
                 else:
                     if( \count($row)!==$this->numColumns ):
-                        throw new Exception('All the rows of the board must have the same length to define a rectangle.');
+                        throw new \InvalidArgumentException('All the rows of the board must have the same length to define a rectangle.');
                     endif;
                 endif;
                 foreach($row as $cell):
                     if( !\is_bool($cell) ):
-                        throw new Exception('All cells must be defined as booleans.');
+                        throw new \InvalidArgumentException('All cells must be defined as booleans.');
                     endif;
                 endforeach;
             endforeach;
