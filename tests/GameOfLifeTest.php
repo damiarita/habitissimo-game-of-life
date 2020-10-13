@@ -110,7 +110,8 @@ final class GameOfLifeTest extends TestCase
         //Position 2,2 is bottom right corner, only 3 neighbours should be found
         $this->assertCount(3, $game->getNeighboursOfCell(2,2)); 
 
-        //We create a 1x1 grid and check that cells on boundaries and in the center return the correct number of neighbours
+
+        //We create a 1x1 grid
         $game = new GameOfLife([[false]]);
 
         //Position 0,0 is surrounded by the boundary, 0 neighbours should be found.
@@ -129,5 +130,45 @@ final class GameOfLifeTest extends TestCase
         $this->assertFalse( $method->invokeArgs($game, [0,1]) );
         $this->assertTrue( $method->invokeArgs($game, [1,0]) );
         $this->assertFalse( $method->invokeArgs($game, [1,1]) );
+    }
+
+    public function testAliveNeighboutsAreCountedCorrectly():void
+    {
+        //We create a 1x1
+        $game = new GameOfLife([[false]]);
+
+        //Position 0,0 is surrounded by the boundary, 0 neighbours should be found.
+        $this->assertEquals(0, $game->getNumberOfAliveNeighbours(0,0));
+
+
+        //We create a 3x3 grid with all cells in the central row alive and all other cells dead.
+        $game = new GameOfLife( [ [false, false, false] , [true, true, true] , [false, false, false] ] );
+        
+        //Position 0,0 is top left corner
+        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(0,0));        
+
+        //Position 0,1 is top boundary
+        $this->assertEquals(3, $game->getNumberOfAliveNeighbours(0,1));
+
+        //Position 0,2 is top right corner
+        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(0,2));         
+
+        //Position 1,0 is left boundary
+        $this->assertEquals(1, $game->getNumberOfAliveNeighbours(1,0));          
+
+        //Position 1,1 is center cell
+        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(1,1));     
+
+        //Position 1,2 is right boundary
+        $this->assertEquals(1, $game->getNumberOfAliveNeighbours(1,2));
+
+        //Position 2,0 is bottom left corner
+        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(2,0));       
+
+        //Position 2,1 is bottom boundary
+        $this->assertEquals(3, $game->getNumberOfAliveNeighbours(2,1)); 
+
+        //Position 2,2 is bottom right corner
+        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(2,2)); 
     }
 }
