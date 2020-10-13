@@ -96,7 +96,7 @@ class GameOfLife
      *
      * @return integer
      */
-    public function getNumRows():int
+    protected function getNumRows():int
     {
         return $this->numRows;
     }
@@ -107,7 +107,7 @@ class GameOfLife
      *
      * @return integer
      */
-    public function getNumColumns():int
+    protected function getNumColumns():int
     {
         return $this->numColumns;
     }
@@ -119,7 +119,7 @@ class GameOfLife
      * @param integer $columnIndex
      * @return array
      */
-    public function getNeighboursOfCell(int $rowIndex, int $columnIndex):array
+    protected function getNeighboursOfCell(int $rowIndex, int $columnIndex):array
     {
         $columnToTheLeftIsInsideBoard = $columnIndex>0;
         $columnToTheRightIsInsideBoard = $columnIndex<($this->getNumColumns()-1);
@@ -181,7 +181,7 @@ class GameOfLife
      * @param integer $columnIndex
      * @return integer
      */
-    public function getNumberOfAliveNeighbours(int $rowIndex, int $columnIndex):int
+    protected function getNumberOfAliveNeighbours(int $rowIndex, int $columnIndex):int
     {
         $neighbours = $this->getNeighboursOfCell($rowIndex, $columnIndex);
 
@@ -200,7 +200,7 @@ class GameOfLife
      * @param integer $columnIndex
      * @return boolean
      */
-    public function willCellLive(int $rowIndex, int $columnIndex):bool
+    protected function willCellLive(int $rowIndex, int $columnIndex):bool
     {
         $numberOfAliveNeighbours = $this->getNumberOfAliveNeighbours($rowIndex, $columnIndex);
 
