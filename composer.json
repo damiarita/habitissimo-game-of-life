@@ -1,0 +1,11 @@
+{
+    "name": "damia/game-of-life",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Damià Rita",
+            "email": "damiarita@gmail.com"
+        }
+    ],
+    "require": {}
+}
