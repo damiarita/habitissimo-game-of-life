@@ -117,4 +117,17 @@ final class GameOfLifeTest extends TestCase
         $this->assertCount(0, $game->getNeighboursOfCell(0,0));
 
     }
+
+    public function testCellStatesAreReadCorrectly():void
+    {
+        $game = new GameOfLife( [[false, false],[true, false]] );
+        $class = new ReflectionClass(GameOfLife::class);
+        $method = $class->getMethod('getStateOfCell');
+        $method->setAccessible(true);
+
+        $this->assertFalse( $method->invokeArgs($game, [0,0]) );
+        $this->assertFalse( $method->invokeArgs($game, [0,1]) );
+        $this->assertTrue( $method->invokeArgs($game, [1,0]) );
+        $this->assertFalse( $method->invokeArgs($game, [1,1]) );
+    }
 }
