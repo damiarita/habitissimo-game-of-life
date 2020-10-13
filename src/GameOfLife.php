@@ -125,30 +125,30 @@ class GameOfLife
         //We check the neighbours on the row on top.
         if($rowOnTopIsInsideBoard):
             if($columnToTheLeftIsInsideBoard):
-                $result[] = $this->getStateOfCell($rowIndex-1, $columnIndex-1);
+                $result[] = $this->isCellAlive($rowIndex-1, $columnIndex-1);
             endif;
-            $result[] = $this->getStateOfCell($rowIndex-1, $columnIndex);
+            $result[] = $this->isCellAlive($rowIndex-1, $columnIndex);
             if($columnToTheRightIsInsideBoard):
-                $result[] = $this->getStateOfCell($rowIndex-1, $columnIndex+1);
+                $result[] = $this->isCellAlive($rowIndex-1, $columnIndex+1);
             endif;
         endif;
 
         //We check the neighbours on the same row.
         if($columnToTheLeftIsInsideBoard):
-            $result[] = $this->getStateOfCell($rowIndex, $columnIndex-1);
+            $result[] = $this->isCellAlive($rowIndex, $columnIndex-1);
         endif;
         if($columnToTheRightIsInsideBoard):
-            $result[] = $this->getStateOfCell($rowIndex, $columnIndex+1);
+            $result[] = $this->isCellAlive($rowIndex, $columnIndex+1);
         endif;
 
         //We check the neighbours on the row below.
         if($rowBeneathIsInsideBoard):
             if($columnToTheLeftIsInsideBoard):
-                $result[] = $this->getStateOfCell($rowIndex+1, $columnIndex-1);
+                $result[] = $this->isCellAlive($rowIndex+1, $columnIndex-1);
             endif;
-            $result[] = $this->getStateOfCell($rowIndex+1, $columnIndex);
+            $result[] = $this->isCellAlive($rowIndex+1, $columnIndex);
             if($columnToTheRightIsInsideBoard):
-                $result[] = $this->getStateOfCell($rowIndex+1, $columnIndex+1);
+                $result[] = $this->isCellAlive($rowIndex+1, $columnIndex+1);
             endif;
         endif;
 
@@ -163,7 +163,7 @@ class GameOfLife
      * @param integer $columnIndex
      * @return boolean If true is returned, the cell is alive. If false is returned, the cell is dead
      */
-    protected function getStateOfCell(int $rowIndex, int $columnIndex):bool
+    protected function isCellAlive(int $rowIndex, int $columnIndex):bool
     {
         return $this->board[$rowIndex][$columnIndex];
     }

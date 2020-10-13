@@ -123,7 +123,7 @@ final class GameOfLifeTest extends TestCase
     {
         $game = new GameOfLife( [[false, false],[true, false]] );
         $class = new ReflectionClass(GameOfLife::class);
-        $method = $class->getMethod('getStateOfCell');
+        $method = $class->getMethod('isCellAlive');
         $method->setAccessible(true);
 
         $this->assertFalse( $method->invokeArgs($game, [0,0]) );
