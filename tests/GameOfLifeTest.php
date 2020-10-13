@@ -38,4 +38,18 @@ final class GameOfLifeTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $game = new GameOfLife($board);
     }
+
+    public function testExceptionThrownWhenBoardContainsNotboolean():void
+    {
+        $board = [ array_fill(0, 2, 'a'), array_fill(0,4,false)];
+        $this->expectException(InvalidArgumentException::class);
+        $game = new GameOfLife($board);
+    }
+
+    public function testExceptionThrownWhenBoardContainsNotarray():void
+    {
+        $board = ['a', array_fill(0,4,false)];
+        $this->expectException(InvalidArgumentException::class);
+        $game = new GameOfLife($board);
+    }
 }
