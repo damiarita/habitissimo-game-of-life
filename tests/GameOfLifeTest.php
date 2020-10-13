@@ -77,4 +77,44 @@ final class GameOfLifeTest extends TestCase
         $this->assertTrue( $method->invokeArgs(null, [['a', 'b', 'c']]) );
         $this->assertFalse( $method->invokeArgs(null, [array('key1'=>'a', 'key2'=>'b', 'key3'=>'c')]) );
     }
+
+    public function testBoundsAreCheckedCorrectly():void
+    {
+        //We create a 3x3 grid and check that cells on boundaries and in the center return the correct number of neighbours
+        $game = new GameOfLife( array_fill(0,3, array_fill(0,3, false)) );
+        
+        //Position 0,0 is top left corner, only 3 neighbours should be found
+        $this->assertCount(3, $game->getNeighboursOfCell(0,0));        
+
+        //Position 0,1 is top boundary, only 5 neighbours should be found
+        $this->assertCount(5, $game->getNeighboursOfCell(0,1));
+
+        //Position 0,2 is top right corner, only 3 neighbours should be found
+        $this->assertCount(3, $game->getNeighboursOfCell(0,2));         
+
+        //Position 1,0 is left boundary, only 5 neighbours should be found
+        $this->assertCount(5, $game->getNeighboursOfCell(1,0));          
+
+        //Position 1,1 is center cell, 8 neighbours should be found
+        $this->assertCount(8, $game->getNeighboursOfCell(1,1));     
+
+        //Position 1,2 is right boundary, only 5 neighbours should be found
+        $this->assertCount(5, $game->getNeighboursOfCell(1,2));
+
+        //Position 2,0 is bottom left corner, only 3 neighbours should be found
+        $this->assertCount(3, $game->getNeighboursOfCell(2,0));       
+
+        //Position 2,1 is bottom boundary, only 5 neighbours should be found
+        $this->assertCount(5, $game->getNeighboursOfCell(2,1)); 
+
+        //Position 2,2 is bottom right corner, only 3 neighbours should be found
+        $this->assertCount(3, $game->getNeighboursOfCell(2,2)); 
+
+        //We create a 1x1 grid and check that cells on boundaries and in the center return the correct number of neighbours
+        $game = new GameOfLife([[false]]);
+
+        //Position 0,0 is surrounded by the boundary, 0 neighbours should be found.
+        $this->assertCount(0, $game->getNeighboursOfCell(0,0));
+
+    }
 }
