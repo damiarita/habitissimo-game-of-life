@@ -66,4 +66,15 @@ final class GameOfLifeTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $game = new GameOfLife($board);
     }
+
+    public function testGameOfLifeCanDetectSquentialArrays():void
+    {
+        $class = new ReflectionClass(GameOfLife::class);
+        $method = $class->getMethod('arrayIsSequential');
+        $method->setAccessible(true);
+        
+        //invokeArgs expects an array of arguments. We send and array of arrays because the first argument of the method is an array
+        $this->assertTrue( $method->invokeArgs(null, [['a', 'b', 'c']]) );
+        $this->assertFalse( $method->invokeArgs(null, [array('key1'=>'a', 'key2'=>'b', 'key3'=>'c')]) );
+    }
 }
