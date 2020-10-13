@@ -1,6 +1,9 @@
 <?php
 namespace GoL;
 
+/**
+  * This class represents a finite version of Conway's Game of Life. It represents only a rectangular sub-section of the board.
+ */
 class GameOfLife
 {
     /**
@@ -81,6 +84,9 @@ class GameOfLife
      */
     private static function arrayIsSequential(array $testArray):bool
     {
+        if( \count($testArray)==0 ):
+            return true;
+        endif;
         return array_keys($testArray)===range( 0, \count($testArray)-1 );
     }
 
@@ -180,6 +186,63 @@ class GameOfLife
         $neighbours = $this->getNeighboursOfCell($rowIndex, $columnIndex);
 
         return \count( array_filter($neighbours, function(bool $cellIsAlive):bool{return $cellIsAlive;}) );
+    }
+
+    /**
+     * Predicts, based on the current state of the cell and its neighbours, whether a cell at row $rowIndex and column $columnIndex with be alive in the next generation.
+     * It follows the next rules
+     * -Any live cell with fewer than two live neighbours dies, as if caused by under-population.
+     * -Any live cell with two or three live neighbours lives on to the next generation.
+     * -Any live cell with more than three live neighbours dies, as if by overcrowding.
+     * -Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+     *
+     * @param integer $rowIndex
+     * @param integer $columnIndex
+     * @return boolean
+     */
+    public function willCellLive(int $rowIndex, int $columnIndex):bool
+    {
+        $numberOfAliveNeighbours = $this->getNumberOfAliveNeighbours($rowIndex, $columnIndex);
+
+        if( $numberOfAliveNeighbours===3 ):
+            return true;
+        endif;
+
+        if( $numberOfAliveNeighbours===2 && $this->isCellAlive($rowIndex, $columnIndex) ):
+            return true;
+        endif;
+
+        return false;
+    }
+
+    /**
+     * Updates the board to the state of the next generation.
+     * It does so by creating a copy of the board and filling it up with the result of $this->willCellLive which uses the current board content. After that, the current board content is deleted from memory and it is replaced with the new board.
+     *
+     * @return void
+     */
+    public function nextGen():void
+    {
+        $newBoard = array_fill(0, $this->getNumRows(), array_fill(0, $this->getNumColumns(), false));
+       
+        for($rowIndex = 0; $rowIndex<$this->getNumRows(); $rowIndex++):
+            for($columnIndex = 0; $columnIndex<$this->getNumColumns(); $columnIndex++):
+                $newBoard[$rowIndex][$columnIndex] = $this->willCellLive($rowIndex, $columnIndex);
+            endfor;
+        endfor;
+
+        unset($this->board);
+        $this->board = $newBoard;
+    }
+
+    /**
+     * Returns the board to give access to its content to clients of this class.
+     *
+     * @return array
+     */
+    public function getBoard():array
+    {
+        return $this->board;
     }
 
 }
