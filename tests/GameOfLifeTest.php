@@ -31,4 +31,11 @@ final class GameOfLifeTest extends TestCase
             [100,90]
         ];
     }
+
+    public function testExceptionThrownWhenRowsSizesAreNotEqual():void
+    {
+        $board = [ array_fill(0, 2, false), array_fill(0,4,false)];
+        $this->expectException(InvalidArgumentException::class);
+        $game = new GameOfLife($board);
+    }
 }
