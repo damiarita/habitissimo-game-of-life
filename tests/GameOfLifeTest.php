@@ -16,8 +16,15 @@ final class GameOfLifeTest extends TestCase
             $gameOfLife
         );
 
-        $this->assertEquals($n_rows, $gameOfLife->getNumRows());
-        $this->assertEquals($n_columns, $gameOfLife->getNumColumns());
+        
+        $class = new ReflectionClass(GameOfLife::class);
+        $getNumRowsMethod = $class->getMethod('getNumRows');
+        $getNumRowsMethod->setAccessible(true);
+        $getNumColumnsMethod = $class->getMethod('getNumColumns');
+        $getNumColumnsMethod->setAccessible(true);
+
+        $this->assertEquals( $n_rows, $getNumRowsMethod->invoke($gameOfLife) );
+        $this->assertEquals( $n_columns, $getNumColumnsMethod->invoke($gameOfLife) );
 
     }
     public function sizesToCreate():array
@@ -82,42 +89,48 @@ final class GameOfLifeTest extends TestCase
 
     public function testBoundsAreCheckedCorrectly():void
     {
+        
+        $class = new ReflectionClass(GameOfLife::class);
+        $getNeighboursOfCellMethod = $class->getMethod('getNeighboursOfCell');
+        $getNeighboursOfCellMethod->setAccessible(true);
+
+
         //We create a 3x3 grid and check that cells on boundaries and in the center return the correct number of neighbours
         $game = new GameOfLife( array_fill(0,3, array_fill(0,3, false)) );
         
         //Position 0,0 is top left corner, only 3 neighbours should be found
-        $this->assertCount(3, $game->getNeighboursOfCell(0,0));        
+        $this->assertCount( 3, $getNeighboursOfCellMethod->invokeArgs($game, [0,0]) );        
 
         //Position 0,1 is top boundary, only 5 neighbours should be found
-        $this->assertCount(5, $game->getNeighboursOfCell(0,1));
+        $this->assertCount( 5, $getNeighboursOfCellMethod->invokeArgs($game, [0,1]) );
 
         //Position 0,2 is top right corner, only 3 neighbours should be found
-        $this->assertCount(3, $game->getNeighboursOfCell(0,2));         
+        $this->assertCount( 3, $getNeighboursOfCellMethod->invokeArgs($game, [0,2]) );         
 
         //Position 1,0 is left boundary, only 5 neighbours should be found
-        $this->assertCount(5, $game->getNeighboursOfCell(1,0));          
+        $this->assertCount( 5, $getNeighboursOfCellMethod->invokeArgs($game, [1,0]) );          
 
         //Position 1,1 is center cell, 8 neighbours should be found
-        $this->assertCount(8, $game->getNeighboursOfCell(1,1));     
+        $this->assertCount( 8, $getNeighboursOfCellMethod->invokeArgs($game, [1,1]) );     
 
         //Position 1,2 is right boundary, only 5 neighbours should be found
-        $this->assertCount(5, $game->getNeighboursOfCell(1,2));
+        $this->assertCount( 5, $getNeighboursOfCellMethod->invokeArgs($game, [1,2]) );
 
         //Position 2,0 is bottom left corner, only 3 neighbours should be found
-        $this->assertCount(3, $game->getNeighboursOfCell(2,0));       
+        $this->assertCount( 3, $getNeighboursOfCellMethod->invokeArgs($game, [2,0]) );       
 
         //Position 2,1 is bottom boundary, only 5 neighbours should be found
-        $this->assertCount(5, $game->getNeighboursOfCell(2,1)); 
+        $this->assertCount( 5, $getNeighboursOfCellMethod->invokeArgs($game, [2,1]) ); 
 
         //Position 2,2 is bottom right corner, only 3 neighbours should be found
-        $this->assertCount(3, $game->getNeighboursOfCell(2,2)); 
+        $this->assertCount( 3, $getNeighboursOfCellMethod->invokeArgs($game, [2,2]) ); 
 
 
         //We create a 1x1 grid
         $game = new GameOfLife([[false]]);
 
         //Position 0,0 is surrounded by the boundary, 0 neighbours should be found.
-        $this->assertCount(0, $game->getNeighboursOfCell(0,0));
+        $this->assertCount( 0, $getNeighboursOfCellMethod->invokeArgs($game, [0,0]) );
 
     }
 
@@ -136,93 +149,104 @@ final class GameOfLifeTest extends TestCase
 
     public function testAliveNeighboutsAreCountedCorrectly():void
     {
+        
+        $class = new ReflectionClass(GameOfLife::class);
+        $getNumberOfAliveNeighboursMethod = $class->getMethod('getNumberOfAliveNeighbours');
+        $getNumberOfAliveNeighboursMethod->setAccessible(true);
+
+
         //We create a 1x1
         $game = new GameOfLife([[false]]);
 
         //Position 0,0 is surrounded by the boundary, 0 neighbours should be found.
-        $this->assertEquals(0, $game->getNumberOfAliveNeighbours(0,0));
+        $this->assertEquals( 0, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [0,0]) );
 
 
         //We create a 3x3 grid with all cells in the central row alive and all other cells dead.
         $game = new GameOfLife( [ [false, false, false] , [true, true, true] , [false, false, false] ] );
         
         //Position 0,0 is top left corner
-        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(0,0));        
+        $this->assertEquals( 2, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [0,0]) );        
 
         //Position 0,1 is top boundary
-        $this->assertEquals(3, $game->getNumberOfAliveNeighbours(0,1));
+        $this->assertEquals( 3, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [0,1]) );
 
         //Position 0,2 is top right corner
-        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(0,2));         
+        $this->assertEquals( 2, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [0,2]) );         
 
         //Position 1,0 is left boundary
-        $this->assertEquals(1, $game->getNumberOfAliveNeighbours(1,0));          
+        $this->assertEquals( 1, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [1,0]) );          
 
         //Position 1,1 is center cell
-        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(1,1));     
+        $this->assertEquals( 2, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [1,1]) );     
 
         //Position 1,2 is right boundary
-        $this->assertEquals(1, $game->getNumberOfAliveNeighbours(1,2));
+        $this->assertEquals( 1, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [1,2]) );
 
         //Position 2,0 is bottom left corner
-        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(2,0));       
+        $this->assertEquals( 2, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [2,0]) );       
 
         //Position 2,1 is bottom boundary
-        $this->assertEquals(3, $game->getNumberOfAliveNeighbours(2,1)); 
+        $this->assertEquals( 3, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [2,1]) ); 
 
         //Position 2,2 is bottom right corner
-        $this->assertEquals(2, $game->getNumberOfAliveNeighbours(2,2)); 
+        $this->assertEquals( 2, $getNumberOfAliveNeighboursMethod->invokeArgs($game, [2,2]) ); 
     }
 
     public function testCellLiveCorrectlyCalculated():void
-    {
+    {        
+        $class = new ReflectionClass(GameOfLife::class);
+        $willCellLiveMethod = $class->getMethod('willCellLive');
+        $willCellLiveMethod->setAccessible(true);
+
+
         /*** CENTRAL CELL ALIVE ***/
         $board = array_fill( 0, 3, array_fill(0,3,false) );
         $board[1][1]=true;
         
         //3x3 grids with central cell alive and rest dead
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 1 neighbour alive
         $board[0][0]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 2 neighbours alive
         $board[0][1]=true;
         $game = new GameOfLife($board);
-        $this->assertTrue( $game->willCellLive(1, 1) );
+        $this->assertTrue( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 3 neighbours alive
         $board[0][2]=true;
         $game = new GameOfLife($board);
-        $this->assertTrue( $game->willCellLive(1, 1) );
+        $this->assertTrue( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 4 neighbours alive
         $board[1][0]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 5 neighbours alive
         $board[1][2]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 6 neighbours alive
         $board[2][0]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 7 neighbours alive
         $board[2][1]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell alive and 8 neighbours alive
         $board[2][2]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         
         /*** CENTRAL CELL DEAD ***/
@@ -230,47 +254,47 @@ final class GameOfLifeTest extends TestCase
         
         //3x3 grids with central cell dead and rest dead
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 1 neighbour alive
         $board[0][0]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 2 neighbours alive
         $board[0][1]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 3 neighbours alive
         $board[0][2]=true;
         $game = new GameOfLife($board);
-        $this->assertTrue( $game->willCellLive(1, 1) );
+        $this->assertTrue( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 4 neighbours alive
         $board[1][0]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 5 neighbours alive
         $board[1][2]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 6 neighbours alive
         $board[2][0]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 7 neighbours alive
         $board[2][1]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
         //3x3 grids with central cell dead and 8 neighbours alive
         $board[2][2]=true;
         $game = new GameOfLife($board);
-        $this->assertFalse( $game->willCellLive(1, 1) );
+        $this->assertFalse( $willCellLiveMethod->invokeArgs($game, [1,1]) );
 
     }
 
