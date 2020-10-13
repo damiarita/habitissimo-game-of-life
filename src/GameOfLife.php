@@ -62,4 +62,27 @@ class GameOfLife
 
         endif;
     }
+
+    /**
+     * Getter for numRows.
+     * It returns the number of rows of the board
+     *
+     * @return integer
+     */
+    public function getNumRows():int
+    {
+        return $this->numRows;
+    }
+
+    /**
+     * Getter for numColumns.
+     * It returns the number of columns of the board
+     *
+     * @return integer
+     */
+    public function getNumColumns():int
+    {
+        return $this->numColumns;
+    }
+
 }
