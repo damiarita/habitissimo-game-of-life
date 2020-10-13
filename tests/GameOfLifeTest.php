@@ -332,6 +332,22 @@ final class GameOfLifeTest extends TestCase
                     [false, false, true, false, false],
                     [false, false, false, false, false]
                 ],
+            ],
+            [
+                [ // Rotated "Blinker" according to https://en.wikipedia.org/wiki/Conway's_Game_of_Life#Examples_of_patterns
+                    [false, false, false, false, false],
+                    [false, false, true, false, false],
+                    [false, false, true, false, false],
+                    [false, false, true, false, false],
+                    [false, false, false, false, false]
+                ],
+                [
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, true, true, true, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false]
+                ],
             ]
         ];
     }
