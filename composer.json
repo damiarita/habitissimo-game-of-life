@@ -10,5 +10,8 @@
     "require": {},
     "require-dev": {
         "phpunit/phpunit": "9"
+    },
+    "autoload": {
+        "psr-4": { "GoL\\": "src/" }
     }
 }
