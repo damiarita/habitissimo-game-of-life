@@ -13,5 +13,10 @@
     },
     "autoload": {
         "psr-4": { "GoL\\": "src/" }
+    },
+    "scripts": {
+        "test": [
+            "phpunit --testdox tests"
+        ]
     }
 }
