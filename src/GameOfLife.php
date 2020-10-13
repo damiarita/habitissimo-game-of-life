@@ -163,7 +163,7 @@ class GameOfLife
      * @param integer $columnIndex
      * @return boolean If true is returned, the cell is alive. If false is returned, the cell is dead
      */
-    public function getStateOfCell(int $rowIndex, int $columnIndex):bool
+    protected function getStateOfCell(int $rowIndex, int $columnIndex):bool
     {
         return $this->board[$rowIndex][$columnIndex];
     }
