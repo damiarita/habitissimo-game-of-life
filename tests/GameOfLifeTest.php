@@ -41,7 +41,7 @@ final class GameOfLifeTest extends TestCase
 
     public function testExceptionThrownWhenBoardContainsNotboolean():void
     {
-        $board = [ array_fill(0, 2, 'a'), array_fill(0,4,false)];
+        $board = [ array_fill(0, 2, 'a'), array_fill(0,2,false)];
         $this->expectException(InvalidArgumentException::class);
         $game = new GameOfLife($board);
     }
