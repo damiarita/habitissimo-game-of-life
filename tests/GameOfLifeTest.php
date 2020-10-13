@@ -10,10 +10,14 @@ final class GameOfLifeTest extends TestCase
     public function testCanCreateNSizeBoard(int $n_rows, int $n_columns):void
     {
         $board = array_fill(0, $n_rows, array_fill(0, $n_columns, false));
+        $gameOfLife = new GameOfLife( $board );
         $this->assertInstanceOf(
             GameOfLife::class,
-            new GameOfLife( $board )
+            $gameOfLife
         );
+
+        $this->assertEquals($n_rows, $gameOfLife->getNumRows());
+        $this->assertEquals($n_columns, $gameOfLife->getNumColumns());
 
     }
     public function sizesToCreate():array
