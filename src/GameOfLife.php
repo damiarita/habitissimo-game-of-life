@@ -40,10 +40,19 @@ class GameOfLife
         if( $this->numRows==0 ):
             $this->numColumns = 0;
         else:
+            //we check that the array of rows is sequential
+            if( !self::arrayIsSequential($this->board) ):
+                throw new \InvalidArgumentException('The array of rows has to be sequential. The keys of the array have to be range from 0 to N-1');
+            endif;
+
             //We check that the content of the array is correct
             foreach($this->board as $row):
                 if( !\is_array($row) ):
                     throw new \InvalidArgumentException('All rows of the board must be defined as arrays.');
+                endif;
+                //we check that the array of cells is sequential
+                if( !self::arrayIsSequential($row) ):
+                    throw new \InvalidArgumentException('The array of cells has to be sequential. The keys of the array have to be range from 0 to N-1');
                 endif;
 
                 if( !isset($this->numColumns) ):
@@ -61,6 +70,18 @@ class GameOfLife
             endforeach;
 
         endif;
+    }
+
+    /**
+     * Checks if the keys of an array are a range like 0, 1, 2....
+     * This would return false in arrays like array('a'=>'foo','b'=>'bar') and would return true in arrays like array(0=>'foo', 1=>'bar')
+     *
+     * @param array $testArray The array that has to be tested
+     * @return boolean
+     */
+    private static function arrayIsSequential(array $testArray):bool
+    {
+        return array_keys($testArray)===range( 0, \count($testArray)-1 );
     }
 
     /**
