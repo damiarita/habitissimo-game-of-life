@@ -76,6 +76,7 @@ final class GameOfLifeTest extends TestCase
         
         //invokeArgs expects an array of arguments. We send and array of arrays because the first argument of the method is an array
         $this->assertTrue( $method->invokeArgs(null, [['a', 'b', 'c']]) );
+        $this->assertTrue( $method->invokeArgs(null, [[]]) );
         $this->assertFalse( $method->invokeArgs(null, [array('key1'=>'a', 'key2'=>'b', 'key3'=>'c')]) );
     }
 
