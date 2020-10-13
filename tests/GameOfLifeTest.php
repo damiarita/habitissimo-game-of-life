@@ -24,6 +24,7 @@ final class GameOfLifeTest extends TestCase
     {
         return [
             [0,0],
+            [1,0],
             [1,1],
             [1,2],
             [2,1],
@@ -170,5 +171,167 @@ final class GameOfLifeTest extends TestCase
 
         //Position 2,2 is bottom right corner
         $this->assertEquals(2, $game->getNumberOfAliveNeighbours(2,2)); 
+    }
+
+    public function testCellLiveCorrectlyCalculated():void
+    {
+        /*** CENTRAL CELL ALIVE ***/
+        $board = array_fill( 0, 3, array_fill(0,3,false) );
+        $board[1][1]=true;
+        
+        //3x3 grids with central cell alive and rest dead
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 1 neighbour alive
+        $board[0][0]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 2 neighbours alive
+        $board[0][1]=true;
+        $game = new GameOfLife($board);
+        $this->assertTrue( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 3 neighbours alive
+        $board[0][2]=true;
+        $game = new GameOfLife($board);
+        $this->assertTrue( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 4 neighbours alive
+        $board[1][0]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 5 neighbours alive
+        $board[1][2]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 6 neighbours alive
+        $board[2][0]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 7 neighbours alive
+        $board[2][1]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell alive and 8 neighbours alive
+        $board[2][2]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        
+        /*** CENTRAL CELL DEAD ***/
+        $board = array_fill( 0, 3, array_fill(0,3,false) );
+        
+        //3x3 grids with central cell dead and rest dead
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 1 neighbour alive
+        $board[0][0]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 2 neighbours alive
+        $board[0][1]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 3 neighbours alive
+        $board[0][2]=true;
+        $game = new GameOfLife($board);
+        $this->assertTrue( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 4 neighbours alive
+        $board[1][0]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 5 neighbours alive
+        $board[1][2]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 6 neighbours alive
+        $board[2][0]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 7 neighbours alive
+        $board[2][1]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+        //3x3 grids with central cell dead and 8 neighbours alive
+        $board[2][2]=true;
+        $game = new GameOfLife($board);
+        $this->assertFalse( $game->willCellLive(1, 1) );
+
+    }
+
+    /**
+     * @dataProvider boardsBeforeAndAfterOneGeneration
+     */
+    public function testBoardUpdatesCorrectly($initialBoard, $expectedBoardAfterOneGeneration):void
+    {
+        $game = new GameOfLife($initialBoard);
+        $game->nextGen();
+        $this->assertEquals( $expectedBoardAfterOneGeneration, $game->getBoard() );
+    }
+
+    public function boardsBeforeAndAfterOneGeneration():array
+    {
+        return [
+            [ 
+                [
+                    []
+                ],
+                [
+                    []
+                ]
+            ],
+            [
+                [
+                    [true]
+                ],
+                [
+                    [false]
+                ]
+            ],
+            [
+                [ //"Block" according to https://en.wikipedia.org/wiki/Conway's_Game_of_Life#Examples_of_patterns
+                    [false, false, false, false],
+                    [false, true, true, false],
+                    [false, true, true, false],
+                    [false, false, false, false]
+                ],
+                [
+                    [false, false, false, false],
+                    [false, true, true, false],
+                    [false, true, true, false],
+                    [false, false, false, false]
+                ]
+            ],
+            [
+                [ //"Blinker" according to https://en.wikipedia.org/wiki/Conway's_Game_of_Life#Examples_of_patterns
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, true, true, true, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false]
+                ],
+                [
+                    [false, false, false, false, false],
+                    [false, false, true, false, false],
+                    [false, false, true, false, false],
+                    [false, false, true, false, false],
+                    [false, false, false, false, false]
+                ],
+            ]
+        ];
     }
 }
