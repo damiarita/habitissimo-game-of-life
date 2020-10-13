@@ -106,4 +106,66 @@ class GameOfLife
         return $this->numColumns;
     }
 
+    /**
+     * Returns an array of booleans with the state of the cells that are in touch with the cell at row $rowIndex and column $columnIndex
+     *
+     * @param integer $rowIndex
+     * @param integer $columnIndex
+     * @return array
+     */
+    public function getNeighboursOfCell(int $rowIndex, int $columnIndex):array
+    {
+        $columnToTheLeftIsInsideBoard = $columnIndex>0;
+        $columnToTheRightIsInsideBoard = $columnIndex<($this->getNumColumns()-1);
+        $rowOnTopIsInsideBoard = $rowIndex>0;
+        $rowBeneathIsInsideBoard = $rowIndex<($this->getNumColumns()-1);
+
+        $result = array();
+
+        //We check the neighbours on the row on top.
+        if($rowOnTopIsInsideBoard):
+            if($columnToTheLeftIsInsideBoard):
+                $result[] = $this->getStateOfCell($rowIndex-1, $columnIndex-1);
+            endif;
+            $result[] = $this->getStateOfCell($rowIndex-1, $columnIndex);
+            if($columnToTheRightIsInsideBoard):
+                $result[] = $this->getStateOfCell($rowIndex-1, $columnIndex+1);
+            endif;
+        endif;
+
+        //We check the neighbours on the same row.
+        if($columnToTheLeftIsInsideBoard):
+            $result[] = $this->getStateOfCell($rowIndex, $columnIndex-1);
+        endif;
+        if($columnToTheRightIsInsideBoard):
+            $result[] = $this->getStateOfCell($rowIndex, $columnIndex+1);
+        endif;
+
+        //We check the neighbours on the row below.
+        if($rowBeneathIsInsideBoard):
+            if($columnToTheLeftIsInsideBoard):
+                $result[] = $this->getStateOfCell($rowIndex+1, $columnIndex-1);
+            endif;
+            $result[] = $this->getStateOfCell($rowIndex+1, $columnIndex);
+            if($columnToTheRightIsInsideBoard):
+                $result[] = $this->getStateOfCell($rowIndex+1, $columnIndex+1);
+            endif;
+        endif;
+
+        return $result;
+    }
+
+    /**
+     * Returns the state of a cell at row $rowIndex and column $columnIndex.
+     * This function is a wrapper of the array $this->board
+     *
+     * @param integer $rowIndex
+     * @param integer $columnIndex
+     * @return boolean If true is returned, the cell is alive. If false is returned, the cell is dead
+     */
+    public function getStateOfCell(int $rowIndex, int $columnIndex):bool
+    {
+        return $this->board[$rowIndex][$columnIndex];
+    }
+
 }
