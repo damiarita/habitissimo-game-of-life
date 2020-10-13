@@ -168,4 +168,18 @@ class GameOfLife
         return $this->board[$rowIndex][$columnIndex];
     }
 
+    /**
+     * Returns the number of neightbours of ($rowIndex, $columnIndex) that are alive
+     *
+     * @param integer $rowIndex
+     * @param integer $columnIndex
+     * @return integer
+     */
+    public function getNumberOfAliveNeighbours(int $rowIndex, int $columnIndex):int
+    {
+        $neighbours = $this->getNeighboursOfCell($rowIndex, $columnIndex);
+
+        return \count( array_filter($neighbours, function(bool $cellIsAlive):bool{return $cellIsAlive;}) );
+    }
+
 }
